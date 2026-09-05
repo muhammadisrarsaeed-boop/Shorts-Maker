@@ -18,21 +18,22 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Ensure Gradle Wrapper Executable Permissions
+    - name: Install Missing Gradle Wrapper
       run: |
-        find . -name "gradlew" -exec chmod +x {} \;
+        npm install -g gradle-to-js || true
+        sudo apt-get update && sudo apt-get install -y gradle
+        gradle wrapper
 
-    - name: Build Debug APK with Gradle Discovery
-      run: |
-        if [ -f "./gradlew" ]; then
-          ./gradlew assembleDebug
-        elif [ -f "./app/gradlew" ]; then
-          cd app && ./gradlew assembleDebug
-        else
-          find . -name "gradlew" -execdir ./gradlew assembleDebug \;
-        fi
+    - name: Setup Gradle Environment
+      uses: gradle/actions/setup-gradle@v3
 
-    - name: Locating and Uploading Generated APK
+    - name: Make Gradle Executable
+      run: chmod +x ./gradlew
+
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug
+
+    - name: Upload APK to GitHub
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
