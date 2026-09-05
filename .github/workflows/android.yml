@@ -20,7 +20,7 @@ jobs:
 
     - name: Initialize Android Project environment
       run: |
-        gradle wrapper --gradle-version 8.4
+        gradle wrapper --gradle-version 9.3.1
         chmod +x gradlew
 
     - name: Compile and Build Package
