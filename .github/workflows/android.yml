@@ -20,7 +20,6 @@ jobs:
 
     - name: Install Missing Gradle Wrapper
       run: |
-        npm install -g gradle-to-js || true
         sudo apt-get update && sudo apt-get install -y gradle
         gradle wrapper
 
@@ -33,10 +32,13 @@ jobs:
     - name: Build Debug APK
       run: ./gradlew assembleDebug
 
+    - name: Force Locate All APKs
+      run: |
+        echo "Searching for built installer files..."
+        find . -name "*.apk"
+
     - name: Upload APK to GitHub
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        path: |
-          **/build/outputs/apk/debug/*.apk
-          **/build/outputs/apk/*/*.apk
+        path: "**/*.apk"
