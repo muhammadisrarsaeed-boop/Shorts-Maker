@@ -1,0 +1,6 @@
+{
+  "name": "ClipAI",
+  "description": "AI Long Video to Shorts Clipper: Ingest podcasts, speeches, interviews, gaming, and long master videos to auto-detect viral hooks, generate vertical 9:16 shorts, fine-tune timestamps frame-by-frame, and export playable MP4 clips.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
