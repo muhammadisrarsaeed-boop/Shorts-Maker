@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Full and Final Android Build
 
 on:
   push:
@@ -9,36 +9,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Source Code
+    - name: Checkout Code
       uses: actions/checkout@v4
 
-    - name: Set up Java
+    - name: Set up Java 17
       uses: actions/setup-java@v4
       with:
-        distribution: 'temurin'
+        distribution: 'zulu'
         java-version: '17'
 
-    - name: Install Missing Gradle Wrapper
+    - name: Initialize Android Project environment
       run: |
-        sudo apt-get update && sudo apt-get install -y gradle
-        gradle wrapper
+        gradle wrapper --gradle-version 8.4
+        chmod +x gradlew
 
-    - name: Setup Gradle Environment
-      uses: gradle/actions/setup-gradle@v3
+    - name: Compile and Build Package
+      run: ./gradlew assembleDebug --no-daemon
 
-    - name: Make Gradle Executable
-      run: chmod +x ./gradlew
-
-    - name: Build Debug APK
-      run: ./gradlew assembleDebug
-
-    - name: Force Locate All APKs
-      run: |
-        echo "Searching for built installer files..."
-        find . -name "*.apk"
-
-    - name: Upload APK to GitHub
+    - name: Export Final Installer File
       uses: actions/upload-artifact@v4
       with:
-        name: app-debug
-        path: "**/*.apk"
+        name: final-app-installer
+        path: "**/build/outputs/apk/**/*.apk"
